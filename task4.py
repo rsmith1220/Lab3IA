@@ -2,34 +2,29 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
-
 from functions import clean_data
+from sklearn.metrics import accuracy_score
 
-#Cargamos los datos limpios
-matrix = clean_data("entrenamiento.txt")
-df = pd.DataFrame(matrix)
-df.to_csv('nuevo.csv', index=False)
-#Cargamos los datos limpios
-data = pd.read_csv('nuevo.csv', header=None)
 
-# Split the data into features (message words) and target variable (ham/spam labels)
-X = data.iloc[:, 1:]
-y = data.iloc[:, 0]
+def predictHamSpam():
+    df = pd.DataFrame(clean_data("entrenamiento.txt"))
+    df.to_csv('nuevo.csv', index=False)
 
-# Convert the text data into numerical features
-vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(X.apply(lambda x: ' '.join(str(word) for word in x), axis=1))
+    data = pd.read_csv('nuevo.csv', header=None)
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X = data.iloc[:, 1:]
+    y = data.iloc[:, 0]
 
-# Create a Naive Bayes classifier with Laplace smoothing
-classifier = MultinomialNB(alpha=1)
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(X.apply(lambda x: ' '.join(str(word) for word in x), axis=1))
 
-# Fit the classifier to the training data
-classifier.fit(X_train, y_train)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Test the accuracy of the classifier on the test data
-accuracy = classifier.score(X_test, y_test)
+    classifier = MultinomialNB(alpha=1)
 
-print("Accuracy:",accuracy)
+    classifier.fit(X_train, y_train)
+
+    accuracy_test = classifier.score(X_test, y_test)
+    accuracy_train = classifier.score(X_train, y_train)
+    print("\tAccuracy test: ",accuracy_test)
+    print("\tAccuracy train: ",accuracy_train)

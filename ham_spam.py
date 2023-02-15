@@ -86,20 +86,25 @@ class HamSPam():
 
     def testing_dataset(self, dataset):
         confusion_matrix = [[0, 0], [0, 0]]
+        total = 0
+        aciertos = 0
         # ham possitive; spam possitive
         for sentence in dataset:
             cls, doc = sentence.strip().split("\t")
             classify = self.classify_text(doc)
-
+            total += 1
+            
             if cls=="ham":
                 if classify==cls: #positive, positive -> 0, 0
                     confusion_matrix[0][0] += 1
+                    aciertos += 1
                 else:
                     confusion_matrix[0][1] += 1
             else:
                 if classify==cls: #positive, positive -> 0, 0
                     confusion_matrix[1][1] += 1
+                    aciertos += 1
                 else:
                     confusion_matrix[1][0] += 1
-        return confusion_matrix
+        return confusion_matrix, aciertos/total
     
