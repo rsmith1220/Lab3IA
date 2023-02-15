@@ -15,8 +15,13 @@ def __is_it_formed_by_special_chars( word):
 def clean_data(filename):
     file_obj = open(filename, "r")
     file_data = file_obj.read()
+    lines = file_data.splitlines()
     clean_dataset = []
-    for linea in file_data:
-        words = [__clean_word_item(word.lower()) for word in linea.strip().split(" ") if __is_it_formed_by_special_chars(word)]
+    for linea in lines:
+        cls, doc = linea.split("\t")
+        words = [cls]
+        for word in doc.strip().split(" "):
+            if __is_it_formed_by_special_chars(word):
+                words.append(__clean_word_item(word.lower()))
         clean_dataset.append(words)
     return clean_dataset
