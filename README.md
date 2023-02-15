@@ -1,3 +1,6 @@
+# Repository
+https://github.com/rsmith1220/Lab3IA.git
+# PIP Requirments
 pip install pandas
 
 pip install scikit-learn
