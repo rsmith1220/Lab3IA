@@ -14,9 +14,9 @@ class HamSPam():
     def __is_it_formed_by_special_chars(self, word):
         i = 0
         while i<len(self.special_chars) and len(word)>0:
-            word.replace(self.special_chars[i], "")
+            word = word.replace(self.special_chars[i], "")
             i += 1
-        return len(word)==0
+        return len(word)!=0
 
     def __clean_format_data(self, text, seed):
         
@@ -90,7 +90,7 @@ class HamSPam():
         for sentence in dataset:
             cls, doc = sentence.strip().split("\t")
             classify = self.classify_text(doc)
-            
+
             if cls=="ham":
                 if classify==cls: #positive, positive -> 0, 0
                     confusion_matrix[0][0] += 1
@@ -102,3 +102,4 @@ class HamSPam():
                 else:
                     confusion_matrix[1][0] += 1
         return confusion_matrix
+    
